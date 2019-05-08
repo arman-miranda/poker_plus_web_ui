@@ -3,18 +3,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   </head>
   <body>
-    <form>
-      Game ID: <input type="text" name="game_id"><br/>
-      <input type="submit" value="Submit">
+    <form action="seat_selection.html">
+      <h4>
+        Game ID:
+        <input type="text" name="game_id" required="true"><br/>
+        <input type="submit" value="Submit">
+      </h4>
     </form>
   </body>
 </html>
-
-<script>
- $('form').on('submit', getGameFromServer);
-
- function getGameFromServer(e) {
-   debugger
-   console.log('test');
- }
-</script>
