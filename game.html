@@ -20,12 +20,14 @@
     params = window.location.search.substring(1).split("&");
     game_id = params[0].split("=")[1]
     seat_number = params[1].split("=")[1]
-    card1 = params[2].split("=")[1]
-    card2 = params[3].split("=")[1]
+    card1_suit = params[2].split("=")[1]
+    card1_value = params[3].split("=")[1]
+    card2_suit = params[4].split("=")[1]
+    card2_value = params[5].split("=")[1]
     $('#game_id').append(game_id)
     $('#seat_number').append(seat_number)
-    $('#card1').append(card1)
-    $('#card2').append(card2)
+    $('#card1').append(card1_value + ' of ' + card1_suit)
+    $('#card2').append(card2_value + ' of ' + card2_suit)
 
     $('form').prepend("<input type='hidden' name='seat_number' value=" + seat_number + ">");
     $('form').prepend("<input type='hidden' name='game_id' value=" + game_id + ">");

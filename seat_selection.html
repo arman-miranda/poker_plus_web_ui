@@ -5,16 +5,19 @@
   <body>
     <h4>Game ID: <a id="game_id"></a></h4>
     <form action="card_input.html">
+      <!-- <form> -->
       Select Seat:<br>
-      <button name="seat_number" value="1"> Seat 1 </button><br>
-      <button name="seat_number" value="2"> Seat 2 </button><br>
-      <button name="seat_number" value="3"> Seat 3 </button><br>
-      <button name="seat_number" value="4"> Seat 4 </button><br>
-      <button name="seat_number" value="5"> Seat 5 </button><br>
-      <button name="seat_number" value="6"> Seat 6 </button><br>
-      <button name="seat_number" value="7"> Seat 7 </button><br>
-      <button name="seat_number" value="8"> Seat 8 </button><br>
-      <button name="seat_number" value="9"> Seat 9 </button><br>
+      <button name="seat_number" id="seat_number_1" value="1"> Seat 1 </button><br>
+      <button name="seat_number" id="seat_number_2" value="2"> Seat 2 </button><br>
+      <button name="seat_number" id="seat_number_3" value="3"> Seat 3 </button><br>
+      <button name="seat_number" id="seat_number_4" value="4"> Seat 4 </button><br>
+      <button name="seat_number" id="seat_number_5" value="5"> Seat 5 </button><br>
+      <button name="seat_number" id="seat_number_6" value="6"> Seat 6 </button><br>
+      <button name="seat_number" id="seat_number_7" value="7"> Seat 7 </button><br>
+      <button name="seat_number" id="seat_number_8" value="8"> Seat 8 </button><br>
+      <button name="seat_number" id="seat_number_9" value="9"> Seat 9 </button><br>
+      <input type="hidden" id="seat_number" name="seat_number">
+      <input type="hidden" id="player_round_id" name="player_round_id"/>
 
     </form>
   </body>
@@ -22,11 +25,53 @@
 
 <script>
   $(document).ready(getGameFromServer);
+  $(document).ready(addButtonListeners);
 
-  function getGameFromServer(e) {
-    params = window.location.search.substring(1).split("&");
-    game_id = params[0].split("=")[1]
+ function pageParameters() {
+   params = window.location.search.substring(1).split("&");
+   game_id = params[0].split("=")[1]
+   return { game_id: game_id }
+ }
+
+  function getGameFromServer() {
+    game_id = pageParameters().game_id
     $('#game_id').append(game_id)
     $('form').prepend("<input type='hidden' name='game_id' value=" + game_id + ">");
+
+    $.ajax({
+      method: 'GET',
+      url: 'http://localhost:3000/player_rounds',
+      data: {
+        game_id: game_id
+      },
+      success: function(data){
+        data.forEach(function(datum){
+          $('#seat_number_' + datum.seat_number).after(' ' + datum.player_name)
+        })
+      }
+    })
   }
+
+ function addButtonListeners() {
+   $('button').on('click', assignSeatNumberToUser)
+ }
+
+ function assignSeatNumberToUser(e){
+   e.preventDefault()
+   $.ajax({
+     method: 'POST',
+     url: 'http://localhost:3000/player_rounds',
+     data: {
+       seat_number: e.target.value,
+       game_id: pageParameters().game_id
+     },
+     success: function (data) {
+       $('#player_round_id').val(data.id)
+       $('#seat_number').val(data.seat_number)
+     },
+     complete: function (data) {
+       $('form').submit()
+     }
+   })
+ }
 </script>
