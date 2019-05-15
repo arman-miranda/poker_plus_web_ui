@@ -40,7 +40,7 @@
 
     $.ajax({
       method: 'GET',
-      url: 'http://localhost:3000/player_rounds',
+      url: 'http://localhost:3000/player_games',
       data: {
         game_id: game_id
       },
@@ -60,7 +60,7 @@
    e.preventDefault()
    $.ajax({
      method: 'POST',
-     url: 'http://localhost:3000/player_rounds',
+     url: 'http://localhost:3000/player_games',
      data: {
        seat_number: e.target.value,
        game_id: pageParameters().game_id
